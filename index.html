@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>دفتر برنامه‌ریزی</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2a6f6b">
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2f6;--grid:#d6dfe9;--page:#fbfcfe;--ink:#1f2a44;--mute:#6b7894;--acc:#2a6f6b;--line:#c9d3e0;--done:#9aa6bb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121826;--grid:#1b2438;--page:#192033;--ink:#e6ebf5;--mute:#8e9bb8;--acc:#5fc2b8;--line:#2c3752;--done:#5d6b8a}}
+:root[data-theme="dark"]{--bg:#121826;--grid:#1b2438;--page:#192033;--ink:#e6ebf5;--mute:#8e9bb8;--acc:#5fc2b8;--line:#2c3752;--done:#5d6b8a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;color:var(--ink);font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.8}
+.sheet{max-width:560px;margin:14px auto;background:var(--page);border:1px solid var(--line);border-radius:6px;padding:18px 18px 24px 16px;border-right:6px double var(--acc)}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h1{font-size:1.35rem;font-weight:800;margin:0;line-height:1.4}
+.sub{color:var(--mute);font-size:.85rem}
+.nav{display:flex;gap:6px}
+button{font:inherit;color:inherit;cursor:pointer}
+.nav button{background:none;border:1px solid var(--line);border-radius:6px;min-width:38px;min-height:38px;font-size:1rem}
+.nav button:focus-visible,.add button:focus-visible,input:focus-visible,textarea:focus-visible,.x:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:12px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+h2{font-size:1rem;font-weight:600;margin:20px 0 6px}
+ul{list-style:none;margin:0;padding:0}
+li{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line);min-height:44px}
+li label{flex:1;display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px 0}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--acc);flex:none}
+li.done span{color:var(--done);text-decoration:line-through}
+.x{background:none;border:0;color:var(--mute);font-size:1.2rem;min-width:36px;min-height:36px}
+.add{display:flex;gap:8px;margin-top:10px}
+input[type=text],textarea{width:100%;font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.add button{background:var(--acc);color:var(--page);border:0;border-radius:6px;padding:0 16px;font-weight:600}
+.pri input{margin-bottom:6px}
+textarea{min-height:110px;resize:vertical;background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% 32px;line-height:32px;padding-top:0}
+.empty{color:var(--mute);font-size:.85rem;padding:8px 0}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tabs button{flex:1;min-height:40px;border:1px solid var(--line);background:none;border-radius:6px;font-weight:600}
+.tabs button[aria-selected=true]{background:var(--acc);color:var(--page);border-color:var(--acc)}
+.tabs button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+select,input[type=number],input[type=date]{width:100%;font:inherit;color:inherit;background:transparent;border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-height:42px}
+select:focus-visible,input[type=number]:focus-visible,input[type=date]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+select option{color:#1f2a44}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.stat{border:1px solid var(--line);border-radius:6px;padding:6px 4px;text-align:center}
+.stat b{display:block;font-size:1.1rem;line-height:1.6}.stat span{font-size:.75rem;color:var(--mute)}
+.up{color:var(--acc)}.dn{color:#c0504d}
+#chart{width:100%;height:auto;margin-top:10px;display:block}
+.meta{color:var(--mute);font-size:.8rem}
+li .tz{font-weight:800;min-width:56px;text-align:left}
+.book{font-weight:800;font-size:1.05rem;color:var(--acc);margin-bottom:8px}
+.cd{font-weight:800;color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line);background:none;border-radius:16px;padding:2px 12px;min-height:34px;font-size:.85rem}
+.sw{display:flex;gap:12px}
+.sw button{width:36px;height:36px;border-radius:50%;border:2px solid var(--page);box-shadow:0 0 0 1px var(--line)}
+.sw button[aria-pressed=true]{box-shadow:0 0 0 2px var(--ink)}
+.chip:focus-visible,.sw button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.tabs button{font-size:.85rem;padding:0 4px}
+.pcard{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:8px;padding:12px;margin-top:10px}
+.pav{font-size:2rem;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:1px solid var(--line);flex:none}
+.pn{font-weight:800;font-size:1.1rem;line-height:1.5}
+#vProf>input,#vProf>select{margin-bottom:8px}
+.chip[aria-pressed=true]{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main class="sheet">
+<div class="book" id="book"></div>
+<div class="tabs" role="tablist"><button id="tDay" role="tab" aria-selected="true">روزانه</button><button id="tEx" role="tab" aria-selected="false">آزمون‌ها</button><button id="tProf" role="tab" aria-selected="false">پروفایل</button><button id="tSet" role="tab" aria-selected="false">تنظیمات</button></div>
+<section id="vDay">
+<header>
+  <div><h1 id="day"></h1><div class="sub" id="greg"></div></div>
+  <div class="nav"><button id="next" aria-label="روز بعد">›</button><button id="today" aria-label="امروز">امروز</button><button id="prev" aria-label="روز قبل">‹</button></div>
+</header>
+<div class="bar"><i id="fill"></i></div>
+<div class="sub" id="count"></div>
+<div class="sub cd" id="cd"></div>
+
+<h2>سه کار مهم امروز</h2>
+<div class="pri">
+  <input type="text" id="p0" placeholder="مهم‌ترین کار">
+  <input type="text" id="p1" placeholder="کار دوم">
+  <input type="text" id="p2" placeholder="کار سوم">
+</div>
+
+<h2>فهرست کارها</h2>
+<ul id="list"></ul>
+<div class="empty" id="empty">هنوز کاری ننوشته‌اید. اولین کار را اضافه کنید.</div>
+<div class="add"><input type="text" id="new" placeholder="کار جدید..."><button id="addBtn">افزودن</button></div>
+<div class="chips" id="dayChips"></div>
+
+<h2>یادداشت</h2>
+<textarea id="note" placeholder="هر چه امروز به ذهنتان رسید..."></textarea>
+</section>
+<section id="vEx" hidden>
+<h1>تراز آزمون‌ها</h1>
+<div class="sub">نتیجه هر آزمون مرآت یا آزمون دیگر را ثبت کنید تا روند ترازتان را ببینید.</div>
+<h2>ثبت آزمون</h2>
+<div class="g2"><select id="exType" aria-label="نوع آزمون"><option>آزمون مرآت</option><option>آزمون دیگر</option></select><input type="text" id="exName" placeholder="نام یا شماره آزمون"></div>
+<div class="g2"><input type="date" id="exDate" aria-label="تاریخ آزمون"><input type="number" id="exTaraz" min="0" max="10000" inputmode="numeric" placeholder="تراز"></div>
+<div class="add"><button id="exAdd" style="min-height:42px;width:100%">ثبت آزمون</button></div>
+<div class="stats" id="stats"></div>
+<div class="meta" id="tgt"></div>
+<svg id="chart" viewBox="0 0 300 130" role="img" aria-label="نمودار روند تراز"></svg>
+<h2>سابقه آزمون‌ها</h2>
+<ul id="exList"></ul>
+<div class="empty" id="exEmpty">هنوز آزمونی ثبت نشده است. ترازتان را بالا وارد کنید.</div>
+</section>
+<section id="vProf" hidden>
+<div class="pcard"><div class="pav" id="pAv"></div><div><div class="pn" id="pSumName"></div><div class="meta" id="pSumLine"></div></div></div>
+<h2>آواتار</h2>
+<div class="chips" id="pAvs"></div>
+<h2>اطلاعات من</h2>
+<input type="text" id="pName" placeholder="نام و نام خانوادگی">
+<div class="g2"><select id="pGrade" aria-label="پایه"><option value="">پایه</option><option>نهم</option><option>دهم</option><option>یازدهم</option><option>دوازدهم</option><option>فارغ‌التحصیل</option></select><select id="pField" aria-label="رشته"><option value="">رشته</option><option>ریاضی</option><option>تجربی</option><option>انسانی</option><option>هنر</option><option>زبان</option></select></div>
+<div class="g2"><input type="text" id="pSchool" placeholder="مدرسه"><input type="text" id="pCity" placeholder="شهر"></div>
+<input type="text" id="pGoal" placeholder="رشته و دانشگاه هدف">
+<input type="number" id="pHours" min="0" max="24" step="0.5" inputmode="decimal" placeholder="هدف ساعت مطالعه در روز">
+<textarea id="pAbout" placeholder="دربارهٔ من و انگیزه‌ام..."></textarea>
+<div class="meta" id="pStat" aria-live="polite">ذخیره‌شده در همین مرورگر</div>
+</section>
+<section id="vSet" hidden>
+<h1>تنظیمات دفتر</h1>
+<h2>عنوان و نام</h2>
+<div class="g2"><input type="text" id="sTitle" placeholder="عنوان دفتر"><input type="text" id="sName" placeholder="نام شما"></div>
+<h2>رنگ دفتر</h2>
+<div class="sw" id="sw"></div>
+<h2>هدف تراز و تاریخ کنکور</h2>
+<div class="g2"><input type="number" id="sTarget" min="0" max="10000" inputmode="numeric" placeholder="هدف تراز"><input type="date" id="sKon" aria-label="تاریخ کنکور"></div>
+<div class="meta" id="sKonFa"></div>
+<h2>درس‌ها</h2>
+<div class="chips" id="subChips"></div>
+<div class="add"><input type="text" id="subNew" placeholder="نام درس..."><button id="subAdd">افزودن</button></div>
+<h2>برنامه ثابت هفته</h2>
+<select id="wDay" aria-label="روز هفته"></select>
+<ul id="wList"></ul>
+<div class="add"><input type="text" id="wNew" placeholder="کار ثابت این روز..."><button id="wAdd">افزودن</button></div>
+<div class="meta">کارهای ثابت هر روز، هنگام باز شدن آن روز به فهرست کارها اضافه می‌شوند.</div>
+</section>
+</main>
+<script>
+(function(){
+var d=new Date();d.setHours(12,0,0,0);
+var store={};
+try{store=JSON.parse(localStorage.getItem('planner')||'{}')||{}}catch(e){store={}}
+function save(){try{localStorage.setItem('planner',JSON.stringify(store))}catch(e){}}
+function key(){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function cur(){var k=key(),r=store[k];if(!r)r=store[k]={p:['','',''],t:[],n:''};
+  if(!r.w&&iso(d)>=iso(new Date())){r.w=1;((cfg.week||{})[d.getDay()]||[]).forEach(function(x){if(!r.t.some(function(t){return t.x===x}))r.t.push({x:x,d:false})});save()}
+  return r}
+var $=function(i){return document.getElementById(i)};
+function render(){
+  var r=cur();renderExtras();
+  $('day').textContent=new Intl.DateTimeFormat('fa-IR-u-ca-persian',{weekday:'long',day:'numeric',month:'long'}).format(d);
+  $('greg').textContent=new Intl.DateTimeFormat('fa-IR',{year:'numeric',month:'long',day:'numeric',calendar:'gregory'}).format(d);
+  for(var i=0;i<3;i++)$('p'+i).value=r.p[i]||'';
+  $('note').value=r.n||'';
+  var ul=$('list');ul.innerHTML='';
+  r.t.forEach(function(t,i){
+    var li=document.createElement('li');if(t.d)li.className='done';
+    var lb=document.createElement('label'),cb=document.createElement('input');cb.type='checkbox';cb.checked=!!t.d;
+    cb.onchange=function(){t.d=cb.checked;save();render()};
+    var sp=document.createElement('span');sp.textContent=t.x;
+    lb.appendChild(cb);lb.appendChild(sp);
+    var x=document.createElement('button');x.className='x';x.textContent='×';x.setAttribute('aria-label','حذف');
+    x.onclick=function(){r.t.splice(i,1);save();render()};
+    li.appendChild(lb);li.appendChild(x);ul.appendChild(li);
+  });
+  $('empty').style.display=r.t.length?'none':'block';
+  var n=r.t.filter(function(t){return t.d}).length,tot=r.t.length;
+  $('fill').style.width=(tot?n/tot*100:0)+'%';
+  $('count').textContent=tot?n.toLocaleString('fa-IR')+' از '+tot.toLocaleString('fa-IR')+' کار انجام شد':'';
+}
+function add(){var v=$('new').value.trim();if(!v)return;cur().t.push({x:v,d:false});$('new').value='';save();render();$('new').focus()}
+$('addBtn').onclick=add;
+$('new').addEventListener('keydown',function(e){if(e.key==='Enter')add()});
+[0,1,2].forEach(function(i){$('p'+i).addEventListener('input',function(e){cur().p[i]=e.target.value;save()})});
+$('note').addEventListener('input',function(e){cur().n=e.target.value;save()});
+$('prev').onclick=function(){d.setDate(d.getDate()-1);render()};
+$('next').onclick=function(){d.setDate(d.getDate()+1);render()};
+$('today').onclick=function(){d=new Date();d.setHours(12,0,0,0);render()};
+
+var ex=[];try{ex=JSON.parse(localStorage.getItem('planner_ex')||'[]')||[]}catch(e){ex=[]}
+function saveEx(){try{localStorage.setItem('planner_ex',JSON.stringify(ex))}catch(e){}}
+function fa(n){return Number(n).toLocaleString('fa-IR',{useGrouping:false,maximumFractionDigits:0})}
+function iso(t){return t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0')}
+function fd(s){return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{day:'numeric',month:'long',year:'numeric'}).format(new Date(s+'T12:00:00'))}
+$('exDate').value=iso(new Date());
+function renderEx(){
+  var a=ex.slice().sort(function(x,y){return x.d<y.d?-1:x.d>y.d?1:x.id-y.id});
+  var st=$('stats');
+  $('tgt').textContent=cfg.target?(a.length?(cfg.target-a[a.length-1].z>0?'تا هدف '+fa(cfg.target)+' برای آخرین آزمون '+fa(cfg.target-a[a.length-1].z)+' تراز مانده است.':'آخرین ترازتان از هدف '+fa(cfg.target)+' بالاتر است.'):'هدف شما: '+fa(cfg.target)):'';
+  if(a.length){
+    var sum=0,best=0;a.forEach(function(e){sum+=e.z;if(e.z>best)best=e.z});
+    var last=a[a.length-1].z,delta=a.length>1?last-a[a.length-2].z:0;
+    st.innerHTML='<div class="stat"><b>'+fa(sum/a.length)+'</b><span>میانگین</span></div><div class="stat"><b>'+fa(best)+'</b><span>بهترین</span></div><div class="stat"><b>'+fa(last)+'</b><span>'+(a.length>1?'آخرین ('+(delta>0?'+':'')+fa(delta)+')':'آخرین')+'</span></div>';
+  }else st.innerHTML='';
+  var c=$('chart');c.innerHTML='';c.style.display=a.length?'block':'none';
+  if(a.length){
+    var mn=Math.min.apply(null,a.map(function(e){return e.z})),mx=Math.max.apply(null,a.map(function(e){return e.z}));
+    if(cfg.target){mn=Math.min(mn,cfg.target);mx=Math.max(mx,cfg.target)}
+    if(mx===mn){mx+=50;mn-=50}
+    var pts=a.map(function(e,i){var x=a.length>1?272-i*(244/(a.length-1)):150,y=100-(e.z-mn)/(mx-mn)*80;return [x,y]});
+    var h='<g stroke="var(--line)"><line x1="20" y1="20" x2="290" y2="20"/><line x1="20" y1="100" x2="290" y2="100"/></g>';
+    h+='<text x="18" y="24" font-size="10" fill="var(--mute)" text-anchor="end">'+fa(mx)+'</text><text x="18" y="104" font-size="10" fill="var(--mute)" text-anchor="end">'+fa(mn)+'</text>';
+    if(a.length>1)h+='<polyline fill="none" stroke="var(--acc)" stroke-width="2" points="'+pts.map(function(p){return p[0]+','+p[1]}).join(' ')+'"/>';
+    pts.forEach(function(p){h+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="var(--acc)"/>'});
+    if(cfg.target){var ty=100-(cfg.target-mn)/(mx-mn)*80;h+='<line x1="20" y1="'+ty+'" x2="290" y2="'+ty+'" stroke="var(--acc)" stroke-dasharray="4 4"/><text x="290" y="'+(ty-3)+'" font-size="10" fill="var(--acc)" text-anchor="end">هدف</text>'}
+    h+='<text x="290" y="122" font-size="10" fill="var(--mute)" text-anchor="end">قدیمی‌ترین</text><text x="26" y="122" font-size="10" fill="var(--mute)">جدیدترین</text>';
+    c.innerHTML=h;
+  }
+  var ul=$('exList');ul.innerHTML='';
+  a.slice().reverse().forEach(function(e){
+    var li=document.createElement('li'),box=document.createElement('div');box.style.flex='1';
+    var t=document.createElement('div');t.textContent=e.t+(e.n?' '+e.n:'');
+    var m=document.createElement('div');m.className='meta';m.textContent=fd(e.d);
+    box.appendChild(t);box.appendChild(m);
+    var z=document.createElement('span');z.className='tz';z.textContent=fa(e.z);
+    var x=document.createElement('button');x.className='x';x.textContent='×';x.setAttribute('aria-label','حذف آزمون');
+    x.onclick=function(){ex=ex.filter(function(q){return q.id!==e.id});saveEx();renderEx()};
+    li.appendChild(box);li.appendChild(z);li.appendChild(x);ul.appendChild(li);
+  });
+  $('exEmpty').style.display=a.length?'none':'block';
+}
+$('exAdd').onclick=function(){
+  var z=parseFloat($('exTaraz').value);
+  if(isNaN(z)||z<0){$('exTaraz').focus();return}
+  ex.push({id:Date.now(),t:$('exType').value,n:$('exName').value.trim(),d:$('exDate').value||iso(new Date()),z:z});
+  $('exName').value='';$('exTaraz').value='';saveEx();renderEx();
+};
+function tab(v){
+  var m={d:'vDay',e:'vEx',p:'vProf',s:'vSet'},ids={d:'tDay',e:'tEx',p:'tProf',s:'tSet'};
+  for(var k in m){$(m[k]).hidden=k!==v;$(ids[k]).setAttribute('aria-selected',String(k===v))}
+  if(v==='e')renderEx();if(v==='s')renderSet();if(v==='p')renderProf();
+}
+$('tDay').onclick=function(){tab('d')};
+$('tEx').onclick=function(){tab('e')};
+$('tProf').onclick=function(){tab('p')};
+$('tSet').onclick=function(){tab('s')};
+
+var TH={teal:['#2a6f6b','#5fc2b8'],indigo:['#3f51b5','#9fa8ff'],rose:['#b03a62','#f08bb0'],amber:['#a0620a','#f0b45a'],green:['#3b7a2a','#8fd072']};
+var TN={teal:'سبزآبی',indigo:'نیلی',rose:'سرخابی',amber:'کهربایی',green:'سبز'};
+var DN=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنج‌شنبه','جمعه','شنبه'],DO=[6,0,1,2,3,4,5];
+var cfg={title:'دفتر برنامه‌ریزی',name:'',theme:'teal',target:'',konkur:'',subjects:[],week:{}};
+try{var c0=JSON.parse(localStorage.getItem('planner_cfg')||'{}')||{};for(var kk in c0)cfg[kk]=c0[kk]}catch(e){}
+if(!Array.isArray(cfg.subjects))cfg.subjects=[];
+if(!cfg.week||typeof cfg.week!=='object')cfg.week={};
+function saveCfg(){try{localStorage.setItem('planner_cfg',JSON.stringify(cfg))}catch(e){}}
+var mq=window.matchMedia('(prefers-color-scheme: dark)'),root=document.documentElement;
+function applyTheme(){var t=root.getAttribute('data-theme'),dk=t==='dark'||(t!=='light'&&mq.matches),c=TH[cfg.theme]||TH.teal;root.style.setProperty('--acc',dk?c[1]:c[0])}
+if(mq.addEventListener)mq.addEventListener('change',applyTheme);
+try{new MutationObserver(applyTheme).observe(root,{attributes:true,attributeFilter:['data-theme']})}catch(e){}
+function renderExtras(){
+  var t=cfg.title||'دفتر برنامه‌ریزی';
+  $('book').textContent=cfg.name?t+'، '+cfg.name:t;document.title=t;
+  var cd=$('cd');cd.textContent='';
+  if(cfg.konkur){var n=Math.round((new Date(cfg.konkur+'T12:00:00')-new Date(iso(new Date())+'T12:00:00'))/864e5);cd.textContent=n>0?fa(n)+' روز تا کنکور':(n===0?'امروز روز کنکور است':'')}
+  var dc=$('dayChips');dc.innerHTML='';
+  cfg.subjects.forEach(function(s){var c=document.createElement('button');c.className='chip';c.textContent=s;c.onclick=function(){$('new').value=s+': ';$('new').focus()};dc.appendChild(c)});
+  applyTheme();
+}
+DO.forEach(function(i){var o=document.createElement('option');o.value=i;o.textContent=DN[i];$('wDay').appendChild(o)});
+function renderSet(){
+  $('sTitle').value=cfg.title;$('sName').value=cfg.name;$('sTarget').value=cfg.target;$('sKon').value=cfg.konkur;
+  $('sKonFa').textContent=cfg.konkur?'تاریخ کنکور: '+fd(cfg.konkur):'';
+  var sw=$('sw');sw.innerHTML='';
+  Object.keys(TH).forEach(function(n){var b=document.createElement('button');b.style.background=TH[n][0];b.setAttribute('aria-label',TN[n]);b.setAttribute('aria-pressed',String(cfg.theme===n));b.onclick=function(){cfg.theme=n;saveCfg();applyTheme();renderSet()};sw.appendChild(b)});
+  var sc=$('subChips');sc.innerHTML='';
+  cfg.subjects.forEach(function(s,i){var b=document.createElement('button');b.className='chip';b.textContent=s+' ×';b.setAttribute('aria-label','حذف '+s);b.onclick=function(){cfg.subjects.splice(i,1);saveCfg();renderSet();renderExtras()};sc.appendChild(b)});
+  var wd=+$('wDay').value,wl=$('wList');wl.innerHTML='';
+  (cfg.week[wd]||[]).forEach(function(x,i){var li=document.createElement('li'),sp=document.createElement('span');sp.style.flex='1';sp.textContent=x;var b=document.createElement('button');b.className='x';b.textContent='×';b.setAttribute('aria-label','حذف');b.onclick=function(){cfg.week[wd].splice(i,1);saveCfg();renderSet()};li.appendChild(sp);li.appendChild(b);wl.appendChild(li)});
+}
+$('sTitle').addEventListener('input',function(e){cfg.title=e.target.value;saveCfg();renderExtras()});
+$('sName').addEventListener('input',function(e){cfg.name=e.target.value;saveCfg();renderExtras()});
+$('sTarget').addEventListener('input',function(e){var v=parseFloat(e.target.value);cfg.target=isNaN(v)?'':v;saveCfg()});
+$('sKon').addEventListener('input',function(e){cfg.konkur=e.target.value;saveCfg();$('sKonFa').textContent=cfg.konkur?'تاریخ کنکور: '+fd(cfg.konkur):'';renderExtras()});
+function addSub(){var v=$('subNew').value.trim();if(!v||cfg.subjects.indexOf(v)>-1)return;cfg.subjects.push(v);$('subNew').value='';saveCfg();renderSet();renderExtras()}
+function addWeek(){var v=$('wNew').value.trim(),wd=+$('wDay').value;if(!v)return;(cfg.week[wd]=cfg.week[wd]||[]).push(v);$('wNew').value='';saveCfg();renderSet()}
+$('subAdd').onclick=addSub;$('wAdd').onclick=addWeek;
+$('subNew').addEventListener('keydown',function(e){if(e.key==='Enter')addSub()});
+$('wNew').addEventListener('keydown',function(e){if(e.key==='Enter')addWeek()});
+$('wDay').addEventListener('change',renderSet);
+
+var prof={av:'🎓',grade:'',field:'',school:'',city:'',goal:'',hours:'',about:''};
+try{var p0=JSON.parse(localStorage.getItem('planner_prof')||'{}')||{};for(var pk in p0)prof[pk]=p0[pk]}catch(e){}
+var AV=['🎓','📚','🚀','🧠','🌱','⭐'],pRef=null,pTimer=null;
+function setStat(t){$('pStat').textContent=t}
+function renderSum(){
+  $('pAv').textContent=prof.av;
+  $('pSumName').textContent=cfg.name||'نام خود را وارد کنید';
+  $('pSumLine').textContent=[prof.grade,prof.field,prof.city].filter(Boolean).join('، ');
+}
+function renderProf(){
+  $('pName').value=cfg.name;$('pGrade').value=prof.grade;$('pField').value=prof.field;$('pSchool').value=prof.school;$('pCity').value=prof.city;$('pGoal').value=prof.goal;$('pHours').value=prof.hours;$('pAbout').value=prof.about;
+  var av=$('pAvs');av.innerHTML='';
+  AV.forEach(function(a){var b=document.createElement('button');b.className='chip';b.textContent=a;b.setAttribute('aria-label','آواتار '+a);b.setAttribute('aria-pressed',String(prof.av===a));b.onclick=function(){prof.av=a;saveProf();renderProf()};av.appendChild(b)});
+  renderSum();
+}
+function saveProf(){
+  try{localStorage.setItem('planner_prof',JSON.stringify(prof))}catch(e){}
+  clearTimeout(pTimer);
+  if(pRef){setStat('در حال ذخیره...');pTimer=setTimeout(function(){pRef.set(Object.assign({},prof,{name:cfg.name||''})).then(function(){setStat('ذخیره و همگام شد')}).catch(function(){setStat('ذخیره شد (فقط در همین مرورگر)')})},700)}
+  else setStat('ذخیره شد (فقط در همین مرورگر)');
+  renderSum();
+}
+[['pGrade','grade'],['pField','field'],['pSchool','school'],['pCity','city'],['pGoal','goal'],['pHours','hours'],['pAbout','about']].forEach(function(q){
+  $(q[0]).addEventListener('input',function(e){prof[q[1]]=e.target.value;saveProf()});
+});
+$('pName').addEventListener('input',function(e){cfg.name=e.target.value;saveCfg();renderExtras();saveProf()});
+(async function(){
+  try{
+    if(!window.claude||!claude.use)return;
+    var u=await claude.use('user'),db=await claude.use('db');
+    if(!u||!db)return;
+    var id=await u.id(),ref=db.collection('data/users/'+id).doc('profile'),snap=await ref.get();
+    if(snap.exists){
+      var v=snap.data()||{};
+      ['av','grade','field','school','city','goal','hours','about'].forEach(function(k){if(v[k]!==undefined)prof[k]=v[k]});
+      if(v.name&&!cfg.name){cfg.name=v.name;saveCfg()}
+      try{localStorage.setItem('planner_prof',JSON.stringify(prof))}catch(e){}
+    }else{await ref.set(Object.assign({},prof,{name:cfg.name||''}))}
+    pRef=ref;renderProf();renderExtras();setStat('همگام با حساب شما');
+  }catch(e){}
+})();
+renderSum();
+render();
+})();
+</script>
+<script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(function(){});</script>
+</body>
+</html>
